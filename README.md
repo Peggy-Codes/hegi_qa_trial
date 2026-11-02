@@ -129,7 +129,7 @@ GitHub PR URL: https://github.com/Peggy-Codes/hegi_qa_trial/pull/4
 
 ### 実作業時間
 
-約1時間30分(2026年11月2日)。
+約2時間(2026年11月2日)。
 
 | 工程 | 時間 |
 |---|---|
@@ -137,4 +137,5 @@ GitHub PR URL: https://github.com/Peggy-Codes/hegi_qa_trial/pull/4
 | テスト追加と最小修正 | 約10分 |
 | レビューと報告の作成 | 約20分 |
 | Issue・PR の作成と CI の確認 | 約20分 |
-| 最終確認 | 約20分 |
+| 報告の仕上げ | 約15分 |
+| 最終確認(テストの実行、差分と PR の確認)とマージ | 約35分 |
