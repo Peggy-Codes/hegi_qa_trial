@@ -1,0 +1,6 @@
+[
+ {"id":"D001","senderType":"staff","subject":"夜勤引継ぎの確認","status":"new"},
+ {"id":"D002","senderType":"family","subject":"面談日程について","status":"in_progress"},
+ {"id":"D003","senderType":"partner","subject":"書類送付のご相談","status":"closed"},
+ {"id":"D004","senderType":"staff","subject":"備品交換のお願い","status":"new"}
+]

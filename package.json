@@ -1,0 +1,1 @@
+{"name":"jisso-qa-starter-hegi","private":true,"version":"0.1.0","type":"module","scripts":{"test":"vitest run","test:watch":"vitest"},"devDependencies":{"typescript":"^5.6.3","vitest":"^2.1.9"}}
