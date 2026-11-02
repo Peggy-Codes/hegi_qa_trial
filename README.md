@@ -34,6 +34,18 @@ Node.js 20+ で `npm install` → `npm test`。GitHub に公開しても差し�
 
 件名検証と状態遷移の不具合3件を再現し、2関数を最小修正しました。既存3件に13件のテストを追加し、修正前は8件成功・8件失敗、修正後は16件すべて成功しました。対象は TypeScript のロジックと Vitest です。
 
+### 成果物一覧
+
+| 成果物 | 場所 |
+|---|---|
+| テストケース一覧 | [TEST_CASES.md](TEST_CASES.md)(基本6件と境界値・追加7件) |
+| 不具合再現手順書 | 本節の[不具合再現](#不具合再現)、[TEST_CASES.md の再現記録](TEST_CASES.md#再現記録)、Issue [#1](https://github.com/Peggy-Codes/hegi_qa_trial/issues/1)・[#2](https://github.com/Peggy-Codes/hegi_qa_trial/issues/2)・[#3](https://github.com/Peggy-Codes/hegi_qa_trial/issues/3) |
+| 追加した自動テストコード | [tests/inquiry.test.ts](tests/inquiry.test.ts) |
+| 修正コード | [src/inquiry.ts](src/inquiry.ts) |
+| テスト実行結果 | 本節の[自動テストと実行結果](#自動テストと実行結果)、[docs/test-results/](docs/test-results/)(実行ログとスクリーンショット) |
+| 改善提案書 | 本節の[改善提案](#改善提案最大3件) |
+| 変更差分と説明 | [PR #4](https://github.com/Peggy-Codes/hegi_qa_trial/pull/4) |
+
 ### 再現環境
 
 - OS: macOS 26.5.2 / Darwin 25.5.0 / arm64
@@ -45,9 +57,9 @@ Node.js 20+ で `npm install` → `npm test`。GitHub に公開しても差し�
 
 | 番号 | 内容 | 期待 | 実際(修正前) | 原因 | 対応ケース | GitHub Issue |
 |---|---|---|---|---|---|---|
-| 1 | 空白だけの件名を受理します | 半角・全角・タブ改行だけの件名は `false` | いずれも `true` | trim 前の文字数を判定しています | T02・T07・T08 | 未作成 |
-| 2 | 完了後に再開できます | `closed`→`new`・`closed`→`in_progress` は `false` | いずれも `true` | `closed` からの変更を禁止する条件がありません | T05・T11 | 未作成 |
-| 3 | 同値遷移を拒否します | 3状態とも同値なら `true` | 3状態とも `false` | `from !== to` が同値を拒否しています | T13 | 未作成 |
+| 1 | 空白だけの件名を受理します | 半角・全角・タブ改行だけの件名は `false` | いずれも `true` | trim 前の文字数を判定しています | T02・T07・T08 | [#1](https://github.com/Peggy-Codes/hegi_qa_trial/issues/1) |
+| 2 | 完了後に再開できます | `closed`→`new`・`closed`→`in_progress` は `false` | いずれも `true` | `closed` からの変更を禁止する条件がありません | T05・T11 | [#2](https://github.com/Peggy-Codes/hegi_qa_trial/issues/2) |
+| 3 | 同値遷移を拒否します | 3状態とも同値なら `true` | 3状態とも `false` | `from !== to` が同値を拒否しています | T13 | [#3](https://github.com/Peggy-Codes/hegi_qa_trial/issues/3) |
 
 不具合3は、課題に記載がなく、仕様との照合で見つけたものです。入力・原因・影響の詳細は [TEST_CASES.md の再現記録](TEST_CASES.md#再現記録)に記載しています。同ファイルの2つのケース表で、修正前後の結果と自動テスト名を対応づけています。
 
@@ -77,19 +89,28 @@ npm test
 
 追加したテストは13件です。空白件名3件、完了後の再開2件、同値遷移3件が修正前に失敗しました。正常な件名2件、正規の遷移2件、一覧抽出と元配列の維持1件は、修正前後とも成功しました。
 
-GitHub Actions の赤→緑は未確認です。上記はローカルでの実行結果です。CI では、まず `10e4812` までを push して失敗を確認し、その後に修正コミット以降を push して成功を確認します。
+GitHub Actions でも同じ結果を確認しました。修正前の `10e4812` だけを先に push して CI が失敗することを確かめ、その後に修正以降を push して成功を確かめています。
+
+| 時点 | CI の結果 |
+|---|---|
+| 修正前 (`10e4812`) | [失敗(8件失敗・8件成功)](https://github.com/Peggy-Codes/hegi_qa_trial/actions/runs/41421724899) |
+| 修正後 (`b13c449`) | [成功(16件成功)](https://github.com/Peggy-Codes/hegi_qa_trial/actions/runs/41421803110) |
+
+![GitHub Actions の実行一覧。修正前のコミットだけが失敗している](docs/test-results/ci-actions-runs.png)
+
+![PR #4 のコミット一覧。test コミットが失敗、docs コミットが成功](docs/test-results/ci-pr-commits.png)
 
 ### 修正差分・GitHub PR URL
 
 - [src/inquiry.ts](src/inquiry.ts): 件名を trim 後に検証し、同値遷移を許可したうえで `closed` から他状態への変更を拒否します。
 - [tests/inquiry.test.ts](tests/inquiry.test.ts): 既存3件を維持し、ケースID付きのテスト13件を追加しました。複数入力はラベル付きの `it.each` で検証します。
-- [docs/test-results/](docs/test-results/): 修正前後の実行ログを出力のまま保存しました。
+- [docs/test-results/](docs/test-results/): 修正前後の実行ログを出力のまま保存し、GitHub Actions のスクリーンショットを追加しました。
 - [TEST_CASES.md](TEST_CASES.md): 修正後の結果、自動テスト名、修正前を再現するコミットを記載しました。
 - [README.md](README.md): 環境・再現手順・結果・改善提案・AI ツールの利用を追記しました。
 
 差分は `git diff 7d17f8c..HEAD -- src/inquiry.ts tests/inquiry.test.ts` で確認できます。ブランチは `fix/inquiry-defects`、コミットは `test:` → `fix:` → `docs:` の順です。
 
-GitHub PR URL: 未作成です。Issue・PR の作成とURLの追記、CI の確認が残っています。
+GitHub PR URL: https://github.com/Peggy-Codes/hegi_qa_trial/pull/4
 
 ### 改善提案（最大3件）
 
