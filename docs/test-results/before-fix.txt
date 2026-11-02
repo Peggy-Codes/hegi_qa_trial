@@ -1,0 +1,97 @@
+
+ RUN  v2.1.9 /Users/peggy/work/採用前トライアル課題/hegi_qa_trial
+
+ ✓ tests/inquiry.test.ts > inquiry baseline > rejects empty subject
+ ✓ tests/inquiry.test.ts > inquiry baseline > accepts subject
+ ✓ tests/inquiry.test.ts > inquiry baseline > filters new inquiries
+ × tests/inquiry.test.ts > validateInquiry > T02/T07/T08: 半角スペース だけの件名は拒否する
+   → expected true to be false // Object.is equality
+ × tests/inquiry.test.ts > validateInquiry > T02/T07/T08: 全角スペース だけの件名は拒否する
+   → expected true to be false // Object.is equality
+ × tests/inquiry.test.ts > validateInquiry > T02/T07/T08: タブ・改行 だけの件名は拒否する
+   → expected true to be false // Object.is equality
+ ✓ tests/inquiry.test.ts > validateInquiry > T09/T10: trim 後1文字 の件名は受理する
+ ✓ tests/inquiry.test.ts > validateInquiry > T09/T10: 前後に空白 の件名は受理する
+ × tests/inquiry.test.ts > canTransition > T05/T11: closed→new の再開は拒否する
+   → expected true to be false // Object.is equality
+ × tests/inquiry.test.ts > canTransition > T05/T11: closed→in_progress の再開は拒否する
+   → expected true to be false // Object.is equality
+ × tests/inquiry.test.ts > canTransition > T13: new→new の同値遷移は許可する
+   → expected false to be true // Object.is equality
+ × tests/inquiry.test.ts > canTransition > T13: in_progress→in_progress の同値遷移は許可する
+   → expected false to be true // Object.is equality
+ × tests/inquiry.test.ts > canTransition > T13: closed→closed の同値遷移は許可する
+   → expected false to be true // Object.is equality
+ ✓ tests/inquiry.test.ts > canTransition > T04/T12: new→in_progress の正規の遷移は許可する
+ ✓ tests/inquiry.test.ts > canTransition > T04/T12: in_progress→closed の正規の遷移は許可する
+ ✓ tests/inquiry.test.ts > filterByStatus > T06: new の ID だけを返し、元の配列を変更しない
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/inquiry.test.ts > validateInquiry > T02/T07/T08: 半角スペース だけの件名は拒否する
+ FAIL  tests/inquiry.test.ts > validateInquiry > T02/T07/T08: 全角スペース だけの件名は拒否する
+ FAIL  tests/inquiry.test.ts > validateInquiry > T02/T07/T08: タブ・改行 だけの件名は拒否する
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/inquiry.test.ts:17:38
+     15|     ['タブ・改行', '\t\n'],
+     16|   ])('T02/T07/T08: %s だけの件名は拒否する', (_label, subject) => {
+     17|     expect(validateInquiry(subject)).toBe(false);
+       |                                      ^
+     18|   });
+     19| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  tests/inquiry.test.ts > canTransition > T05/T11: closed→new の再開は拒否する
+ FAIL  tests/inquiry.test.ts > canTransition > T05/T11: closed→in_progress の再開は拒否する
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/inquiry.test.ts:33:41
+     31|     ['closed→in_progress', 'in_progress'],
+     32|   ])('T05/T11: %s の再開は拒否する', (_label, to) => {
+     33|     expect(canTransition('closed', to)).toBe(false);
+       |                                         ^
+     34|   });
+     35| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  tests/inquiry.test.ts > canTransition > T13: new→new の同値遷移は許可する
+ FAIL  tests/inquiry.test.ts > canTransition > T13: in_progress→in_progress の同値遷移は許可する
+ FAIL  tests/inquiry.test.ts > canTransition > T13: closed→closed の同値遷移は許可する
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/inquiry.test.ts:41:43
+     39|     ['closed→closed', 'closed'],
+     40|   ])('T13: %s の同値遷移は許可する', (_label, status) => {
+     41|     expect(canTransition(status, status)).toBe(true);
+       |                                           ^
+     42|   });
+     43| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ Test Files  1 failed (1)
+      Tests  8 failed | 8 passed (16)
+   Start at  18:06:44
+   Duration  358ms (transform 64ms, setup 0ms, collect 60ms, tests 7ms, environment 0ms, prepare 42ms)
+
